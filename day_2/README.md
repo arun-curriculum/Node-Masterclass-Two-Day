@@ -114,3 +114,62 @@ app.get("/books", (req, res) => {
     res.send(`The title is ${req.query.title}`);
 });
 ```
+
+## Server-Side Rendering vs Client-Side Rendering
+
+- When the server issues the final response to the client, the format is generally one of two options - HTML or JSON.
+- If HTML is the response type, it is up to the server to determine how to present data and render it on the view.
+- If JSON is the response type, it is up to the browser to determine how to present the data, and eventually incorporate that into a HTML presentation.
+- We will first look at server-side rendering through the EJS module:
+
+#### Install with NPM:
+
+```
+npm install ejs --save
+```
+
+#### Set up EJS for use:
+
+```javascript
+app.set("view engine", "ejs");
+```
+
+- Now instead of using `res.send` to return HTML responses we can use `res.render`:
+
+```javascript
+res.render("hello", {
+    name: req.params.name
+});
+```
+
+- If you use server-side rendering, you will also need to tell Express where to find static assets like CSS stylesheets and client-side JavaScript:
+
+```javascript
+app.use(express.static("./assets"));
+```
+
+- Client-side rendering is much easier from a Node perspective because we are simply returning raw data back to the client instead of a fully-formed presentational response.
+- Usually these raw data are in the form of JSON. Let's take an example from the above:
+
+```javascript
+res.status(200).json({
+    message: `Hello ${req.params.name}`
+});
+```
+
+- At this point it is up to the client-side code to determine what to do with these data.
+
+## User Manager Code-Along
+
+- We will be demonstrating server-side rendering through coding along a user manager using the [request module](https://www.npmjs.com/package/request) from before.
+- We will be using the Person API located here: http://myapi-profstream.herokuapp.com
+- We will be using the user interface here: https://github.com/arun-projects/User-Manager
+
+## Book Manager Lab
+
+- In this lab we will be practicing server-side rendering by creating a book manager application.
+- We will be using the Book API located here: http://myapi-profstream.herokuapp.com
+- We will be using the user interface here: https://github.com/arun-projects/Book-Manager
+- Your job is to implement the show all books and add new book functionality.
+
+## MVC Structure and Data Persistence with MongoDB

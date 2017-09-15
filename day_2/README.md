@@ -173,3 +173,36 @@ res.status(200).json({
 - Your job is to implement the show all books and add new book functionality.
 
 ## MVC Structure and Data Persistence with MongoDB
+
+- The Model-View-Controller pattern is a popular way of developing applications due to its ability to keep code clean, modular, and testable.
+- We will look at using the MVC pattern by recreating the user manager using MongoDB, Mongoose, and Node through a TDD approach.
+- First we will have to connect to MongoDB and set up our model through Mongoose:
+
+```javascript
+const mongoose = require("mongoose");
+
+if (process.env.NODE_ENV === "test") {
+  mongoose.connect("mongodb://localhost/user_manager_test");
+} else {
+  mongoose.connect("mongodb://localhost/user_manager");
+}
+
+const Person = mongoose.model("Person", {
+  firstname: String,
+  lastname: String,
+  username: String,
+  email: String
+});
+
+module.exports = Person;
+```
+
+## MVC and Data Persistence Lab
+
+- In this lab you will create an API using Node, MongoDB, and Mongoose to serve data for the book manager application.
+- Your job is to create this using the TDD approach.
+
+## Blog.Ly Lab
+
+- To put it all together you will now be developing a backend to serve a frontend written in React JS.
+- Please refer to the project here: https://github.com/arun-projects/Blog-Ly-Backend

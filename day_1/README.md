@@ -238,3 +238,117 @@ showWeather();
 - Step 2: Create a function that returns a promise that decreases the count by 1 after 1 second.
 - Step 3: Create an async function that calls the function 20 times and awaits for the promise to be resolved.
 - Step 4: In the second function, create a console.log statement to show the count in the terminal.
+
+## Filesystem in Node
+
+- Working with files in Node is straightforward and uses the same approach as everything else in Node - events.
+- Built-in to Node we get the "fs" module that helps us interact with the filesystem.
+- Let's see an example of working with the filesystem to read and then write to a file.
+- You can find the sample file here: https://s3-us-west-2.amazonaws.com/daretodiscover/wordsEn.txt
+
+fs_test.js
+
+```javascript
+const fs = require("fs");
+
+const read = fs.createReadStream("./wordsEn.txt");
+const write = fs.createWriteStream("./newWords.txt");
+
+read.pipe(write);
+
+write.on("finish", () => {
+    console.log("Write operation finished");
+});
+```
+
+- Notice that these operations are happening asynchronously, and the only way we can tell if this is done is to detect the "finish" event.
+- Let's see what's happening under the hood:
+
+```javascript
+read.on("data", (data) => {
+    console.log(data);
+});
+```
+
+## `__dirname`
+
+- `__dirname` is a global variable that references the directory name of the current module.
+- This is helpful when you need to use full paths to files and you need to know where you are in the filesystem currently.
+- You can combine the use of the "path" module to work with this effectively:
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+const read = fs.createReadStream(path.join(__dirname, "wordsEn.txt"));
+const write = fs.createWriteStream(path.join(__dirname, "newWords.txt"));
+
+read.pipe(write);
+
+write.on("finish", () => {
+    console.log("Write operation finished");
+});
+```
+
+## Filesystem Lab
+
+- In this lab we will be modifying the code we wrote previously to generically copy any file.
+- Here are the steps you should follow:
+    - Step 1: Set up a function called "copyFile" that will be used to copy any file.
+    - Step 2: Set up your read stream and write stream within the function. Make sure both files (input and target) come from a function parameter.
+    - Step 3: Pipe the read stream into the write stream.
+    - Step 4: Export your function as a module that can be imported.
+    - Step 5: Implement a callback function that is triggered after the file copy is successful.
+    - **Bonus:** Transition the callback function to a promise.
+
+## Transpiling ES6 to ES5 with Webpack
+
+- Webpack is one of the many build tools to help automate processes.
+- One of the operations that it is highly used for is to automate transpilation from ES6 to ES5 using a package called Babel: https://babeljs.io
+- To use Webpack we must first configure it.
+
+Install Babel and presets:
+
+```
+npm install --save-dev babel-core babel-preset-es2015
+```
+
+Install `babel-loader`:
+
+```
+npm install --save-dev babel-loader
+```
+
+Configure Babel to use these presets by adding `.babelrc`:
+
+```json
+{ "presets": [ "es2015" ] }
+```
+
+Add a webpack.config.js to process all .js files using babel-loader:
+
+```javascript
+const path = require("path");
+
+module.exports = {
+  target: "node",
+  entry: "./index.js",
+  output: {
+    path: path.join(__dirname, "dist"),
+    filename: "index.bundle.js"
+  },
+  module: {
+    loaders: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: "babel-loader"
+    }]
+  }
+}
+```
+
+Bundle the modules using Webpack:
+
+```
+webpack
+```

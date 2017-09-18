@@ -9,6 +9,8 @@
 - Using NPM
 - Unit testing with Mocha-Chai
 - Asynchronous programming with Node
+- Filesystem operations
+- Transpiling to ES5
 
 ### [Day 2](day_2/)
 
@@ -20,3 +22,4 @@
 - Server side vs client side rendering
 - MVC programming
 - Introduction to data persistence with MongoDB
+- Websockets

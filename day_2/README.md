@@ -206,3 +206,97 @@ module.exports = Person;
 
 - To put it all together you will now be developing a backend to serve a frontend written in React JS.
 - Please refer to the project here: https://github.com/arun-projects/Blog-Ly-Backend
+
+## Websockets
+
+- One of the most powerful uses for Node is its ability to handle seamless "real-time" experiences.
+- Sockets are a way for a browser and server to communicate without the standard request-response cycle.
+- Chat clients, real-time data feeds, and operational dashboards are some examples of where sockets have been used effectively.
+
+## How it Basically Works
+
+- A client makes an initial request out to the server and a "handshake" is created - AKA a connection has been established.
+- This "handshake" is given a unique socket with a unique ID.
+- Essentially this request never completes and remains open for the duration of the session.
+- Every further request-response simulation is done via a manifestation of a JavaScript event.
+- In a perfect world this is how things would always operate with sockets but certain factors such as browser incompatibility and more can interfere with a proper handshake. As a result, a more brute-force approach of "polling" may be required.
+
+## Socket.io
+
+- Socket.io is a library that essentially manages browser capabilities to connect a client with a server through web sockets in the most ideal way possible.
+- It can switch between polling and sockets automatically and basically automate the handshake process.
+- Socket.io works on the client and the server side to achieve seamless interaction.
+
+#### Server Setup
+
+- In order to use Node and Express to communicate over websockets we will have to install socket.io:
+
+```javascript
+const express = require("express");
+const app = express();
+
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
+server.listen(3000);
+```
+
+- We can now use the `io` instance to listen for events over all sockets:
+
+```javascript
+io.on("connection", (socket) => {
+    // "socket" now refers to a specific connection that was made from the client
+});
+```
+
+- Individual sockets receive emitted data that can be listened for:
+
+```javascript
+socket.on("some event", (data) => {
+    // "data" refers to any payload coming from the broadcast
+});
+```
+
+- Sockets can also emit data back to all other connections (including your own):
+
+```javascript
+io.emit("some event", params);
+```
+
+- Or simply to everyone but yours:
+
+```javascript
+socket.broadcast.emit("some event", params);
+```
+
+#### Client Setup
+
+- The client setup is very similar to the server setup.
+- We will first link the socket.io library: https://socket.io
+- Next let's connect to our socket server:
+
+```javascript
+var socket = io.connect("server url");
+```
+
+- Notice that we do not define an "io" variable. This is because the client is only connected to one socket vs the server that has to connect to many different sockets.
+- The client can now listen for events:
+
+```javascript
+socket.on("some event", function(data) {
+    // "data" represents the payload of data coming over the socket
+});
+```
+
+- The client can also emit events:
+
+```javascript
+socket.emit("some event", data);
+```
+
+- Notice that there is no need to "broadcast" the data since these data will only be emitted from this one socket back to the server.
+
+## Real-Time Chat Lab
+
+- In this lab we will be working to create a real-time chat application.
+- Please refer to the project here: https://github.com/arun-projects/Socket-Chat
